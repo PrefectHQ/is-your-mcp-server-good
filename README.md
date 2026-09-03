@@ -18,9 +18,9 @@ four servers over the same API, and two scripts that measure them:
 | `prefect-designed` | the hand-written [prefect-mcp-server](https://github.com/PrefectHQ/prefect-mcp-server), run via `uvx --from prefect-mcp prefect-mcp-server` |
 
 ```sh
-uvx prefect server start          # a local prefect api at localhost:4200
-uv run demos/context_tax.py       # tools and listing size for one-to-one, designed, code mode
-uv run demos/middleware_trim.py   # one tool call, before and after the middleware
+uvx prefect server start                                                       # a local prefect api at localhost:4200
+uvx --from git+https://github.com/PrefectHQ/is-your-mcp-server-good context-tax       # tools and listing size, three servers
+uvx --from git+https://github.com/PrefectHQ/is-your-mcp-server-good middleware-trim   # one tool call, before and after the middleware
 ```
 
 measured 2026-09-03, token counts estimated as bytes divided by four:
@@ -34,8 +34,9 @@ raw            10,312 bytes  ~2,578 tokens  for 5 flow runs
 trimmed         6,444 bytes  ~1,611 tokens  for 5 flow runs
 ```
 
-all four servers are configured in [`.mcp.json`](.mcp.json), so `claude` launched
-from the repo root can attach to any of them. the local Prefect api needs some
+all four servers are configured in [`.mcp.json`](.mcp.json) as `uvx` commands, so
+`claude` launched from a clone can attach to any of them, and the same entries can
+be pasted into any other client's config. the local Prefect api needs some
 flow runs in it before the "why did my last run fail" prompt has anything to find.
 
 ## design
@@ -46,9 +47,9 @@ flow runs in it before the "why did my last run fail" prompt has anything to fin
   `tools/list` result, the thing an agent pays for before the user asks anything.
 - **the designed server is real** — prefect-mcp-server is built through evals on
   every pull request; it is the customer story, not a toy.
-- **the spec is cached** — `demos/prefect_servers.py` fetches the OpenAPI spec
-  from the running api and keeps a copy, so the servers start even when the api
-  is down; tool calls still need it up.
+- **the spec is cached** — the servers fetch the OpenAPI spec from the running
+  api and keep a copy under `~/.cache/mcp-server-demos`, so they start even when
+  the api is down; tool calls still need it up.
 
 ## license
 

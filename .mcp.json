@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "prefect-1to1": { "command": "uv", "args": ["run", "demos/prefect_servers.py", "one-to-one"] },
-    "prefect-trimmed": { "command": "uv", "args": ["run", "demos/prefect_servers.py", "trimmed"] },
-    "prefect-codemode": { "command": "uv", "args": ["run", "demos/prefect_servers.py", "code-mode"] },
+    "prefect-1to1": { "command": "uvx", "args": ["--from", "git+https://github.com/PrefectHQ/is-your-mcp-server-good", "prefect-servers", "one-to-one"] },
+    "prefect-trimmed": { "command": "uvx", "args": ["--from", "git+https://github.com/PrefectHQ/is-your-mcp-server-good", "prefect-servers", "trimmed"] },
+    "prefect-codemode": { "command": "uvx", "args": ["--from", "git+https://github.com/PrefectHQ/is-your-mcp-server-good", "prefect-servers", "code-mode"] },
     "prefect-designed": {
       "command": "uvx",
       "args": ["--from", "prefect-mcp", "prefect-mcp-server"],

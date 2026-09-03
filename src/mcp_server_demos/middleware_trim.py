@@ -1,18 +1,14 @@
 """what one tool call costs the agent, before and after a response-trimming middleware.
 
-run: uv run demos/middleware_trim.py
+run: uvx --from git+https://github.com/PrefectHQ/is-your-mcp-server-good middleware-trim
 """
 
 import asyncio
 import json
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+from fastmcp import Client
 
-from prefect_servers import build  # noqa: E402
-
-from fastmcp import Client  # noqa: E402
+from mcp_server_demos.prefect_servers import build
 
 TOOL = "read_flow_runs_flow_runs_filter_post"
 ARGS = {"limit": 5, "sort": "START_TIME_DESC"}
@@ -31,5 +27,9 @@ async def main() -> None:
     await cost("trimmed", "trimmed")
 
 
-if __name__ == "__main__":
+def run() -> None:
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    run()

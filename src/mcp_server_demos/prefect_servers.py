@@ -1,8 +1,8 @@
 """the same prefect api, served three ways. pick one by name on the command line.
 
-  uv run demos/prefect_servers.py one-to-one   # every rest endpoint is a tool
-  uv run demos/prefect_servers.py trimmed      # same, but a middleware drops nulls before the agent sees them
-  uv run demos/prefect_servers.py code-mode    # same tools behind search / get_schema / execute
+  uvx --from git+https://github.com/PrefectHQ/is-your-mcp-server-good prefect-servers one-to-one   # every rest endpoint is a tool
+  uvx --from git+https://github.com/PrefectHQ/is-your-mcp-server-good prefect-servers trimmed      # same, but a middleware drops nulls before the agent sees them
+  uvx --from git+https://github.com/PrefectHQ/is-your-mcp-server-good prefect-servers code-mode    # same tools behind search / get_schema / execute
 
 each runs over stdio so claude code or pi can attach to it (see .mcp.json).
 """
@@ -40,7 +40,7 @@ class DropNulls(Middleware):
         return result
 
 
-SPEC_CACHE = Path(__file__).with_name("prefect-openapi.json")
+SPEC_CACHE = Path.home() / ".cache" / "mcp-server-demos" / "prefect-openapi.json"
 
 
 def load_spec() -> dict[str, Any]:
@@ -50,6 +50,7 @@ def load_spec() -> dict[str, Any]:
         if not SPEC_CACHE.exists():
             raise SystemExit(f"prefect is not running at {PREFECT_API} and no cached spec at {SPEC_CACHE}")
         return json.loads(SPEC_CACHE.read_text())
+    SPEC_CACHE.parent.mkdir(parents=True, exist_ok=True)
     SPEC_CACHE.write_text(json.dumps(spec))
     return spec
 
@@ -71,5 +72,9 @@ def build(flavor: str) -> FastMCP:
     raise SystemExit(f"unknown flavor {flavor!r}; use one-to-one, trimmed, or code-mode")
 
 
-if __name__ == "__main__":
+def main() -> None:
     build(sys.argv[1] if len(sys.argv) > 1 else "one-to-one").run()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,12 +1,18 @@
 [project]
-name = "is-your-mcp-server-good"
+name = "mcp-server-demos"
 version = "0.1.0"
-description = "one prefect api served four ways: the demos behind the webinar of the same name"
+description = "one prefect api served four ways: the demos behind the 'Is Your MCP Server Good?' webinar"
 requires-python = ">=3.12"
 dependencies = [
     "fastmcp[code-mode]>=4.0.2",
     "httpx2",
 ]
 
-[tool.uv]
-package = false
+[project.scripts]
+context-tax = "mcp_server_demos.context_tax:run"
+middleware-trim = "mcp_server_demos.middleware_trim:run"
+prefect-servers = "mcp_server_demos.prefect_servers:main"
+
+[build-system]
+requires = ["uv_build>=0.8"]
+build-backend = "uv_build"

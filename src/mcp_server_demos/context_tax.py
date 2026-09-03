@@ -5,7 +5,7 @@ three servers over the same prefect api:
   2. designed:   the hand-written prefect-mcp-server (a dozen tools, read-only), run via uvx --from prefect-mcp
   3. code mode:  the one-to-one server behind a CodeMode transform
 
-run: uv run demos/context_tax.py
+run: uvx --from git+https://github.com/PrefectHQ/is-your-mcp-server-good context-tax
 """
 
 import asyncio
@@ -54,5 +54,9 @@ async def main() -> None:
     await measure("code mode", Client(code_mode))
 
 
-if __name__ == "__main__":
+def run() -> None:
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    run()
